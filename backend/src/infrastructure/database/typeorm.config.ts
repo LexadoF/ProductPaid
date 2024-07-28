@@ -10,6 +10,7 @@ import { ProductModel } from './models/product.model';
 import { CustomerModel } from './models/customer.model';
 import { TransactionModel } from './models/transaction.model';
 import { DeliveryModel } from './models/delivery.model';
+import { ProductSeeder } from './seeds/products.seed';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -26,6 +27,7 @@ export const AppDataSource = new DataSource({
 export const initializeDataSource = async (): Promise<void> => {
   try {
     await AppDataSource.initialize();
+    await ProductSeeder.seed();
     console.info('Data source initialized');
   } catch (err) {
     console.error(`Failed to initialize data source: ${err}`);
