@@ -8,6 +8,7 @@ import {
 } from './enviromental.config';
 import { ProductModel } from './models/product.model';
 import { CustomerModel } from './models/customer.model';
+import { TransactionModel } from './models/transaction.model';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -16,7 +17,7 @@ export const AppDataSource = new DataSource({
   username: dbUser,
   password: dbPassword,
   database: dbName,
-  entities: [ProductModel, CustomerModel],
+  entities: [ProductModel, CustomerModel, TransactionModel],
   charset: 'utf8mb4',
   synchronize: true,
 });
