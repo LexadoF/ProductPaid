@@ -6,6 +6,7 @@ import {
   dbPort,
   dbUser,
 } from './enviromental.config';
+import { ProductModel } from './models/product.model';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -14,7 +15,7 @@ export const AppDataSource = new DataSource({
   username: dbUser,
   password: dbPassword,
   database: dbName,
-  entities: [],
+  entities: [ProductModel],
   charset: 'utf8mb4',
   synchronize: true,
 });
