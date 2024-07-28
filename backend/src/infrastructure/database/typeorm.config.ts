@@ -9,6 +9,7 @@ import {
 import { ProductModel } from './models/product.model';
 import { CustomerModel } from './models/customer.model';
 import { TransactionModel } from './models/transaction.model';
+import { DeliveryModel } from './models/delivery.model';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -17,7 +18,7 @@ export const AppDataSource = new DataSource({
   username: dbUser,
   password: dbPassword,
   database: dbName,
-  entities: [ProductModel, CustomerModel, TransactionModel],
+  entities: [ProductModel, CustomerModel, TransactionModel, DeliveryModel],
   charset: 'utf8mb4',
   synchronize: true,
 });
