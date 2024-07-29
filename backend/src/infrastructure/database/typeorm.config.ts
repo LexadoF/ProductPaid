@@ -14,32 +14,41 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class DataSourceImpl {
-  private dataSource: DataSource;
+  private static instance: DataSource;
 
   constructor() {
-    this.dataSource = new DataSource({
-      type: 'mysql',
-      host: dbHost,
-      port: dbPort,
-      username: dbUser,
-      password: dbPassword,
-      database: dbName,
-      entities: [ProductModel, CustomerModel, TransactionModel, DeliveryModel],
-      charset: 'utf8mb4',
-      synchronize: true,
-    });
+    if (!DataSourceImpl.instance) {
+      DataSourceImpl.instance = new DataSource({
+        type: 'mysql',
+        host: dbHost,
+        port: dbPort,
+        username: dbUser,
+        password: dbPassword,
+        database: dbName,
+        entities: [
+          ProductModel,
+          CustomerModel,
+          TransactionModel,
+          DeliveryModel,
+        ],
+        charset: 'utf8mb4',
+        synchronize: true,
+      });
+    }
   }
 
-  getDataSource() {
-    return this.dataSource;
+  getDataSource(): DataSource {
+    return DataSourceImpl.instance;
   }
 
   async initialize(): Promise<void> {
-    try {
-      await this.dataSource.initialize();
-      console.info('Data source initialized');
-    } catch (err) {
-      console.error(`Failed to initialize data source: ${err}`);
+    if (!DataSourceImpl.instance.isInitialized) {
+      try {
+        await DataSourceImpl.instance.initialize();
+        console.info('Data source initialized');
+      } catch (err) {
+        console.error(`Failed to initialize data source: ${err}`);
+      }
     }
   }
 }
