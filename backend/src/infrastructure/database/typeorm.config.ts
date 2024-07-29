@@ -40,7 +40,6 @@ export class DataSourceImpl {
       console.info('Data source initialized');
     } catch (err) {
       console.error(`Failed to initialize data source: ${err}`);
-      process.exit(1);
     }
   }
 }
