@@ -16,7 +16,7 @@ export class TransactionModel {
   @Column('varchar', { nullable: false, unique: true })
   transactionNumber: string;
 
-  @Column('varchar', { nullable: false, default: 'PENDING_APROVAL' })
+  @Column('varchar', { nullable: false, default: 'PENDING' })
   status: string;
 
   @ManyToOne(() => CustomerModel, (customer) => customer.id, {
