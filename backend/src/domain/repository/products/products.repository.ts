@@ -13,4 +13,9 @@ export class ProductsRepository {
     const productsRepo = this.conn.getRepository(ProductModel);
     return await productsRepo.find();
   }
+
+  async getProductById(id: number): Promise<ProductModel[]> {
+    const productsRepo = this.conn.getRepository(ProductModel);
+    return await productsRepo.find({ where: { id: id } });
+  }
 }
