@@ -12,5 +12,8 @@ export class CustomerModel {
   email: string;
 
   @Column('varchar', { nullable: false })
+  password: string;
+
+  @Column('varchar', { nullable: false })
   address: string;
 }
