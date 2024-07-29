@@ -1,7 +1,8 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Global, Module, OnModuleInit } from '@nestjs/common';
 import { DataSourceImpl } from './typeorm.config';
 import { ProductSeeder } from './seeds/products.seed';
 
+@Global()
 @Module({
   imports: [],
   controllers: [],
