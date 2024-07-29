@@ -12,6 +12,7 @@ export class ProductSeeder {
       .getDataSource()
       .getRepository(ProductModel);
 
+    await productRepository.delete({});
     const products = [
       {
         name: 'Product 1',
