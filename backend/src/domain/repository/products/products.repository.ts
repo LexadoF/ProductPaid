@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
-import { ProductModel } from 'src/infrastructure/database/models/product.model';
-import { DataSourceImpl } from 'src/infrastructure/database/typeorm.config';
+import { ProductModel } from '../../../infrastructure/database/models/product.model';
+import { DataSourceImpl } from '../../../infrastructure/database/typeorm.config';
 import { DataSource } from 'typeorm';
 
 export class ProductsRepository {

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ProductsService } from 'src/infrastructure/services/products/products.service';
+import { ProductsService } from '../../../infrastructure/services/products/products.service';
 
 @Injectable()
 export class ProductsListUsecase {

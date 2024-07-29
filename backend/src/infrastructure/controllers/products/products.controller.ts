@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ProductsListUsecase } from 'src/application/useCases/products-list.usecase/products-list.usecase';
+import { ProductsListUsecase } from '../../../application/useCases/products-list.usecase/products-list.usecase';
 
 @Controller('products')
 export class ProductsController {
