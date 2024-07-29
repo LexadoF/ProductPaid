@@ -1,10 +1,16 @@
-// src/infrastructure/database/seeds/product.seed.ts
-import { AppDataSource } from '../typeorm.config';
+import { Inject } from '@nestjs/common';
 import { ProductModel } from '../models/product.model';
+import { DataSourceImpl } from '../typeorm.config';
 
 export class ProductSeeder {
-  static async seed() {
-    const productRepository = AppDataSource.getRepository(ProductModel);
+  constructor(
+    @Inject(DataSourceImpl) private readonly dataSource: DataSourceImpl,
+  ) {}
+
+  async seed() {
+    const productRepository = this.dataSource
+      .getDataSource()
+      .getRepository(ProductModel);
 
     const products = [
       {
