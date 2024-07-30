@@ -7,10 +7,12 @@ import { ApplicationModule } from '../application/application.module';
 import { DomainModule } from '../domain/domain.module';
 import { UsersController } from './controllers/users/users.controller';
 import { AuthController } from './controllers/auth/auth.controller';
+import { UsersService } from './services/users/users.service';
+import { AuthService } from './services/auth/auth.service';
 
 @Module({
   imports: [ApplicationModule, DomainModule],
-  providers: [DataSourceImpl, ProductSeeder, ProductsService],
+  providers: [DataSourceImpl, ProductSeeder, ProductsService, UsersService, AuthService],
   controllers: [ProductsController, UsersController, AuthController],
 })
 export class InfrastructureModule {}
