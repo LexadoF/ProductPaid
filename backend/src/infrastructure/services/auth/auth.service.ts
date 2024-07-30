@@ -14,6 +14,7 @@ export class AuthService {
     const user = await this.authRepository.login(data);
     if (!user) throw new UnauthorizedException('Invalid credentials');
     const payload = {
+      id: user.id,
       email: user.email,
       name: user.name,
       addres: user.address,
