@@ -8,7 +8,7 @@ import { TransactionModel } from '../../../infrastructure/database/models/transa
 import { v4 } from 'uuid';
 import { DeliveryModel } from '../../../infrastructure/database/models/delivery.model';
 import { ProductModel } from '../../../infrastructure/database/models/product.model';
-import { TransactionStatus } from '../../../domain/enums/transaction-status.enum';
+import { TransactionStatus } from '../../enums/transaction.enum';
 
 export class TransactionRepository implements TrasnactionAbstractionRepository {
   private conn: DataSource;
@@ -53,37 +53,21 @@ export class TransactionRepository implements TrasnactionAbstractionRepository {
     transaction.transactionNumber = transctnum;
     transaction.delivery_id = deliveryInDB.id;
     transaction.product_id = newTransaction.product_id;
+    transaction.subtotal = await this.CalculateSubtotal(
+      newTransaction.product_id,
+      newTransaction.product_ammount,
+    );
     return await this.conn.manager.save(TransactionModel, transaction);
   }
 
-  async updateTransactionStatus(
-    transactionNumber: string,
-    newStatus: TransactionStatus,
-  ): Promise<void> {
-    const transactionRepo = this.conn.getRepository(TransactionModel);
-    const transaction = await transactionRepo.findOne({
-      where: { transactionNumber: transactionNumber },
+  private async CalculateSubtotal(
+    id_product: number,
+    quantity: number,
+  ): Promise<number> {
+    const productRepo = this.conn.getRepository(ProductModel);
+    const product = await productRepo.findOne({
+      where: { id: id_product },
     });
-    if (!transaction) {
-      throw new BadRequestException('Transaction not found');
-    }
-
-    if (transaction.status !== newStatus) {
-      if (
-        newStatus === TransactionStatus.DECLINED ||
-        newStatus === TransactionStatus.ERROR
-      ) {
-        const productRepo = this.conn.getRepository(ProductModel);
-        const product = await productRepo.findOne({
-          where: { id: transaction.product_id },
-        });
-        if (product) {
-          product.stock += transaction.product_ammount;
-          await productRepo.save(product);
-        }
-      }
-      transaction.status = newStatus;
-      await transactionRepo.save(transaction);
-    }
+    return product.price * quantity;
   }
 }
