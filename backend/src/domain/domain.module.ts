@@ -4,6 +4,7 @@ import { ProductsService } from '../infrastructure/services/products/products.se
 import { UsersService } from '../infrastructure/services/users/users.service';
 import { UsersRepository } from './repository/users/users.repository';
 import { AuthRepository } from './repository/logins/auth.repository';
+import { TransactionRepository } from './repository/transaction/transaction.repository';
 
 @Module({
   imports: [],
@@ -14,7 +15,13 @@ import { AuthRepository } from './repository/logins/auth.repository';
     UsersService,
     UsersRepository,
     AuthRepository,
+    TransactionRepository,
   ],
-  exports: [ProductsRepository, UsersRepository, AuthRepository],
+  exports: [
+    ProductsRepository,
+    UsersRepository,
+    AuthRepository,
+    TransactionRepository,
+  ],
 })
 export class DomainModule {}

@@ -32,6 +32,11 @@ import { TransactionsController } from './controllers/transactions/transactions.
     AuthService,
     TransactionsService,
   ],
-  controllers: [ProductsController, UsersController, AuthController, TransactionsController],
+  controllers: [
+    ProductsController,
+    UsersController,
+    AuthController,
+    TransactionsController,
+  ],
 })
 export class InfrastructureModule {}
