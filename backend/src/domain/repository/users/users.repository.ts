@@ -28,6 +28,18 @@ export class UsersRepository implements usersAbstractionRepository {
     }
   }
 
+  async getUser(email: string): Promise<CustomerModel> {
+    const exists = await this.userExists(email);
+    if (exists === false) {
+      throw new BadRequestException('User not exists');
+    } else {
+      const user = await this.conn
+        .getRepository(CustomerModel)
+        .find({ where: { email: email } });
+      return user[0];
+    }
+  }
+
   private async userExists(email: string): Promise<boolean> {
     const user = await this.conn
       .getRepository(CustomerModel)

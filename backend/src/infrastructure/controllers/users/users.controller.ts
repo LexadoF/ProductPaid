@@ -9,10 +9,14 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from '../../../application/dtos/user.dto';
 import { UsersCreateUsecase } from '../../../application/useCases/users-create/users-create.usecase';
+import { UsersGetOneUsecase } from 'src/application/useCases/users-get-one/users-get-one.usecase';
 
 @Controller('users')
 export class UsersController {
-  constructor(private userCreateUseCase: UsersCreateUsecase) {}
+  constructor(
+    private userCreateUseCase: UsersCreateUsecase,
+    private userGetUseCase: UsersGetOneUsecase,
+  ) {}
 
   @Post('/create')
   createUser(@Body() newUser: CreateUserDto) {
@@ -24,9 +28,9 @@ export class UsersController {
     return `${id}  ${updatedUserFields}`;
   }
 
-  @Get(':id')
-  getUser(@Param('id') id: number) {
-    return id;
+  @Get(':email')
+  getUser(@Param('email') email: string) {
+    return this.userGetUseCase.execute(email);
   }
 
   @Delete(':id')
