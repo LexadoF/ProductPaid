@@ -10,7 +10,7 @@ export class ProductsService {
     return this.productsRepository.getProductsList();
   }
 
-  async getProductById(id: number): Promise<ProductModel[]> {
+  async getProductById(id: number): Promise<ProductModel> {
     return this.productsRepository.getProductById(id);
   }
 }
