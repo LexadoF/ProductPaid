@@ -11,6 +11,8 @@ import { UsersService } from './services/users/users.service';
 import { AuthService } from './services/auth/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtSecret } from './database/enviromental.config';
+import { TransactionsService } from './services/transactions/transactions.service';
+import { TransactionsController } from './controllers/transactions/transactions.controller';
 
 @Module({
   imports: [
@@ -28,7 +30,8 @@ import { jwtSecret } from './database/enviromental.config';
     ProductsService,
     UsersService,
     AuthService,
+    TransactionsService,
   ],
-  controllers: [ProductsController, UsersController, AuthController],
+  controllers: [ProductsController, UsersController, AuthController, TransactionsController],
 })
 export class InfrastructureModule {}

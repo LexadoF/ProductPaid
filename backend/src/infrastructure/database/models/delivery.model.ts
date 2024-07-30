@@ -1,12 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
-import { CustomerModel } from './customer.model';
-import { ProductModel } from './product.model';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('deliveries')
 export class DeliveryModel {
@@ -15,14 +7,4 @@ export class DeliveryModel {
 
   @Column('varchar', { nullable: false })
   address: string;
-
-  @ManyToOne(() => CustomerModel, (customer) => customer.id, {
-    nullable: false,
-  })
-  @JoinColumn({ name: 'customer_id', referencedColumnName: 'id' })
-  customer_id: CustomerModel | number;
-
-  @ManyToOne(() => ProductModel, (product) => product.id, { nullable: false })
-  @JoinColumn({ name: 'product_id', referencedColumnName: 'id' })
-  product_id: ProductModel | number;
 }
