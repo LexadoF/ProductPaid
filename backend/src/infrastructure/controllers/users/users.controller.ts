@@ -7,13 +7,16 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { CreateUserDto } from 'src/application/dtos/user.dto';
+import { UsersCreateUsecase } from 'src/application/useCases/users-create/users-create.usecase';
 
 @Controller('users')
 export class UsersController {
+  constructor(private userCreateUseCase: UsersCreateUsecase) {}
+
   @Post('/create')
-  createUser(@Body() newUser: any) {
-    console.log(newUser);
-    return 'create works';
+  createUser(@Body() newUser: CreateUserDto) {
+    return this.userCreateUseCase.execute(newUser);
   }
 
   @Patch(':id')

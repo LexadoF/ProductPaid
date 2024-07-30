@@ -12,7 +12,13 @@ import { AuthService } from './services/auth/auth.service';
 
 @Module({
   imports: [ApplicationModule, DomainModule],
-  providers: [DataSourceImpl, ProductSeeder, ProductsService, UsersService, AuthService],
+  providers: [
+    DataSourceImpl,
+    ProductSeeder,
+    ProductsService,
+    UsersService,
+    AuthService,
+  ],
   controllers: [ProductsController, UsersController, AuthController],
 })
 export class InfrastructureModule {}
