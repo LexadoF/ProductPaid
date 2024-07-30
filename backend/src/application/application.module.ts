@@ -4,7 +4,7 @@ import { ProductsListUsecase } from './useCases/products-list/products-list.usec
 import { DomainModule } from '../domain/domain.module';
 import { ProductsGetOneByIdUsecase } from './useCases/products-get-one-by-id/products-get-one-by-id.usecase';
 import { UsersCreateUsecase } from './useCases/users-create/users-create.usecase';
-import { UsersService } from 'src/infrastructure/services/users/users.service';
+import { UsersService } from '../infrastructure/services/users/users.service';
 
 @Module({
   imports: [DomainModule],

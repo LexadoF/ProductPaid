@@ -7,8 +7,8 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CreateUserDto } from 'src/application/dtos/user.dto';
-import { UsersCreateUsecase } from 'src/application/useCases/users-create/users-create.usecase';
+import { CreateUserDto } from '../../../application/dtos/user.dto';
+import { UsersCreateUsecase } from '../../../application/useCases/users-create/users-create.usecase';
 
 @Controller('users')
 export class UsersController {

@@ -2,8 +2,8 @@ import { BadRequestException, Inject } from '@nestjs/common';
 import { DataSourceImpl } from '../../../infrastructure/database/typeorm.config';
 import { DataSource } from 'typeorm';
 import { usersAbstractionRepository } from './users-abstraction.repository';
-import { CreateUserDto } from 'src/application/dtos/user.dto';
-import { CustomerModel } from 'src/infrastructure/database/models/customer.model';
+import { CreateUserDto } from '../../../application/dtos/user.dto';
+import { CustomerModel } from '../../../infrastructure/database/models/customer.model';
 import { hash } from 'bcrypt';
 
 export class UsersRepository implements usersAbstractionRepository {
