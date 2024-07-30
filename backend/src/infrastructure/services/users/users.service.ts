@@ -5,7 +5,7 @@ import {
 } from '../../../application/dtos/user.dto';
 import { UsersRepository } from '../../../domain/repository/users/users.repository';
 import { isEmail } from 'class-validator';
-import { CustomerModel } from 'src/infrastructure/database/models/customer.model';
+import { CustomerModel } from '../../../infrastructure/database/models/customer.model';
 
 @Injectable()
 export class UsersService {

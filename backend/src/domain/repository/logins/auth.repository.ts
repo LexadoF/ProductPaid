@@ -1,8 +1,8 @@
 import { Inject, UnauthorizedException } from '@nestjs/common';
 import { DataSourceImpl } from '../../../infrastructure/database/typeorm.config';
 import { DataSource } from 'typeorm';
-import { LoginDto } from 'src/application/dtos/auth.dto';
-import { CustomerModel } from 'src/infrastructure/database/models/customer.model';
+import { LoginDto } from '../../../application/dtos/auth.dto';
+import { CustomerModel } from '../../../infrastructure/database/models/customer.model';
 import { compare } from 'bcrypt';
 
 export class AuthRepository {

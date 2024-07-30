@@ -13,8 +13,8 @@ import {
 } from '../../../application/dtos/user.dto';
 import { UsersCreateUsecase } from '../../../application/useCases/users-create/users-create.usecase';
 import { UsersGetOneUsecase } from '../../../application/useCases/users-get-one/users-get-one.usecase';
-import { UsersUpdateUsecase } from 'src/application/useCases/users-update/users-update.usecase';
-import { UsersDeleteUsecase } from 'src/application/useCases/users-delete/users-delete.usecase';
+import { UsersUpdateUsecase } from '../../../application/useCases/users-update/users-update.usecase';
+import { UsersDeleteUsecase } from '../../../application/useCases/users-delete/users-delete.usecase';
 
 @Controller('users')
 export class UsersController {
