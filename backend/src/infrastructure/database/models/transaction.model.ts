@@ -23,6 +23,12 @@ export class TransactionModel {
   @Column('int', { unsigned: true, default: 1, nullable: false })
   product_ammount: number;
 
+  @Column('varchar', { nullable: true })
+  id_paymentService: string;
+
+  @Column('int', { nullable: false })
+  subtotal: number;
+
   @ManyToOne(() => CustomerModel, (customer) => customer.id, {
     nullable: false,
   })
