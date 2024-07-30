@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateUserDto } from 'src/application/dtos/user.dto';
-import { CustomerModel } from 'src/infrastructure/database/models/customer.model';
-// import { CustomerModel } from 'src/infrastructure/database/models/customer.model';
-import { UsersService } from 'src/infrastructure/services/users/users.service';
+import { UpdateUserDto } from '../../../application/dtos/user.dto';
+import { CustomerModel } from '../../../infrastructure/database/models/customer.model';
+import { UsersService } from '../../../infrastructure/services/users/users.service';
 
 @Injectable()
 export class UsersUpdateUsecase {

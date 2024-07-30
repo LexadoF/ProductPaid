@@ -9,9 +9,19 @@ import { UsersController } from './controllers/users/users.controller';
 import { AuthController } from './controllers/auth/auth.controller';
 import { UsersService } from './services/users/users.service';
 import { AuthService } from './services/auth/auth.service';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtSecret } from './database/enviromental.config';
 
 @Module({
-  imports: [ApplicationModule, DomainModule],
+  imports: [
+    ApplicationModule,
+    DomainModule,
+    JwtModule.register({
+      global: true,
+      secret: jwtSecret,
+      signOptions: { expiresIn: '3600s' },
+    }),
+  ],
   providers: [
     DataSourceImpl,
     ProductSeeder,

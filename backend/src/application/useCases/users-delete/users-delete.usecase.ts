@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/infrastructure/services/users/users.service';
+import { UsersService } from '../../../infrastructure/services/users/users.service';
 
 @Injectable()
 export class UsersDeleteUsecase {
