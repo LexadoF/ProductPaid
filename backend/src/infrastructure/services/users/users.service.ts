@@ -29,4 +29,10 @@ export class UsersService {
       throw new BadRequestException('Please provide a valid email');
     return await this.usersRepository.updateUser(email, updatedUserFields);
   }
+
+  async deleteUser(email: string): Promise<void> {
+    if (!isEmail(email))
+      throw new BadRequestException('Please provide a valid email');
+    return await this.usersRepository.deleteUser(email);
+  }
 }

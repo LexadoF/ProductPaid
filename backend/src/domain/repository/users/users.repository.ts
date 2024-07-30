@@ -55,6 +55,16 @@ export class UsersRepository implements usersAbstractionRepository {
     return await this.conn.getRepository(CustomerModel).save(user);
   }
 
+  async deleteUser(email: string): Promise<void> {
+    const exists = await this.userExists(email);
+    if (exists === false) {
+      throw new BadRequestException('User not exists');
+    } else {
+      await this.conn.getRepository(CustomerModel).delete({ email: email });
+      return;
+    }
+  }
+
   private async userExists(email: string): Promise<boolean> {
     const user = await this.conn
       .getRepository(CustomerModel)

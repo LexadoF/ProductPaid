@@ -7,6 +7,7 @@ import { UsersCreateUsecase } from './useCases/users-create/users-create.usecase
 import { UsersService } from '../infrastructure/services/users/users.service';
 import { UsersGetOneUsecase } from './useCases/users-get-one/users-get-one.usecase';
 import { UsersUpdateUsecase } from './useCases/users-update/users-update.usecase';
+import { UsersDeleteUsecase } from './useCases/users-delete/users-delete.usecase';
 
 @Module({
   imports: [DomainModule],
@@ -19,6 +20,7 @@ import { UsersUpdateUsecase } from './useCases/users-update/users-update.usecase
     UsersService,
     UsersGetOneUsecase,
     UsersUpdateUsecase,
+    UsersDeleteUsecase,
   ],
   exports: [
     ProductsListUsecase,
@@ -26,6 +28,7 @@ import { UsersUpdateUsecase } from './useCases/users-update/users-update.usecase
     UsersCreateUsecase,
     UsersGetOneUsecase,
     UsersUpdateUsecase,
+    UsersDeleteUsecase,
   ],
 })
 export class ApplicationModule {}

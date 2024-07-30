@@ -11,4 +11,5 @@ export abstract class usersAbstractionRepository {
     email: string,
     updatedUserFields: UpdateUserDto,
   ): Promise<CustomerModel>;
+  abstract deleteUser(email: string): Promise<void>;
 }

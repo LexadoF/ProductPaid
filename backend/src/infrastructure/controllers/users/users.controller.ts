@@ -14,6 +14,7 @@ import {
 import { UsersCreateUsecase } from '../../../application/useCases/users-create/users-create.usecase';
 import { UsersGetOneUsecase } from '../../../application/useCases/users-get-one/users-get-one.usecase';
 import { UsersUpdateUsecase } from 'src/application/useCases/users-update/users-update.usecase';
+import { UsersDeleteUsecase } from 'src/application/useCases/users-delete/users-delete.usecase';
 
 @Controller('users')
 export class UsersController {
@@ -21,6 +22,7 @@ export class UsersController {
     private userCreateUseCase: UsersCreateUsecase,
     private userGetUseCase: UsersGetOneUsecase,
     private userUpdateUseCase: UsersUpdateUsecase,
+    private userDeleteUseCase: UsersDeleteUsecase,
   ) {}
 
   @Post('/create')
@@ -41,8 +43,8 @@ export class UsersController {
     return this.userGetUseCase.execute(email);
   }
 
-  @Delete(':id')
-  deleteUser(@Param('id') id: number) {
-    return id;
+  @Delete(':email')
+  deleteUser(@Param('email') email: string) {
+    return this.userDeleteUseCase.execute(email);
   }
 }
