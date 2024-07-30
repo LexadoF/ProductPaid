@@ -12,7 +12,6 @@ export class ProductSeeder {
       .getDataSource()
       .getRepository(ProductModel);
 
-    await productRepository.delete({});
     const products = [
       {
         id: 1,
@@ -86,6 +85,12 @@ export class ProductSeeder {
       },
     ];
 
-    await productRepository.save(products);
+    const existingProducts = await productRepository.find({
+      where: products.map((product) => ({ name: product.name })),
+    });
+
+    if (existingProducts.length === 0) {
+      await productRepository.save(products);
+    }
   }
 }

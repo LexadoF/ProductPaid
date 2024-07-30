@@ -3,7 +3,7 @@ import { ProductSeeder } from './products.seed';
 import { DataSourceImpl } from '../typeorm.config';
 
 const mockProductRepository = {
-  delete: jest.fn(),
+  find: jest.fn(),
   save: jest.fn(),
 };
 
@@ -42,10 +42,25 @@ describe('ProductSeeder', () => {
     expect(productSeeder).toBeDefined();
   });
 
-  it('should seed products correctly', async () => {
+  it('should seed products if they do not exist', async () => {
+    mockProductRepository.find.mockResolvedValue([]);
+
     await productSeeder.seed();
 
-    expect(mockProductRepository.delete).toHaveBeenCalledWith({});
+    expect(mockProductRepository.find).toHaveBeenCalledWith({
+      where: [
+        { name: 'Product 1' },
+        { name: 'Product 2' },
+        { name: 'Product 3' },
+        { name: 'Product 4' },
+        { name: 'Product 5' },
+        { name: 'Product 6' },
+        { name: 'Product 7' },
+        { name: 'Product 8' },
+        { name: 'Product 9' },
+        { name: 'Product 10' },
+      ],
+    });
 
     expect(mockProductRepository.save).toHaveBeenCalledWith([
       {
@@ -119,5 +134,36 @@ describe('ProductSeeder', () => {
         stock: 1000,
       },
     ]);
+  });
+
+  it('should not seed products if they already exist', async () => {
+    mockProductRepository.find.mockResolvedValue([
+      {
+        id: 1,
+        name: 'Product 1',
+        description: 'Description for product 1',
+        price: 1000000,
+        stock: 100,
+      },
+    ]);
+
+    await productSeeder.seed();
+
+    expect(mockProductRepository.find).toHaveBeenCalledWith({
+      where: [
+        { name: 'Product 1' },
+        { name: 'Product 2' },
+        { name: 'Product 3' },
+        { name: 'Product 4' },
+        { name: 'Product 5' },
+        { name: 'Product 6' },
+        { name: 'Product 7' },
+        { name: 'Product 8' },
+        { name: 'Product 9' },
+        { name: 'Product 10' },
+      ],
+    });
+
+    expect(mockProductRepository.save).not.toHaveBeenCalled();
   });
 });
