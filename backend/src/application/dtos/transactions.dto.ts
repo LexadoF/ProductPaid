@@ -53,4 +53,8 @@ export class CreateTransactionDto {
   @ValidateNested()
   @Type(() => CardDto)
   card: CardDto;
+
+  @IsNotEmpty()
+  @IsString()
+  acceptance_token: string;
 }
