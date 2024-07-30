@@ -12,16 +12,17 @@ export class UsersRepository implements usersAbstractionRepository {
   constructor(@Inject(DataSourceImpl) private dataSourceImpl: DataSourceImpl) {
     this.conn = this.dataSourceImpl.getDataSource();
   }
-  async createUser(newUser: CreateUserDto): Promise<any> {
+
+  async createUser(newUser: CreateUserDto): Promise<void> {
     const exists = await this.userExists(newUser.email);
     if (exists === false) {
-      console.log('enterthus2');
       const userModel = new CustomerModel();
       userModel.email = newUser.email;
       userModel.name = newUser.name;
       userModel.address = newUser.address;
       userModel.password = await this.hashPassword(newUser.password);
-      return await this.conn.manager.insert(CustomerModel, userModel);
+      await this.conn.manager.insert(CustomerModel, userModel);
+      return;
     } else {
       throw new BadRequestException('User already exists');
     }
