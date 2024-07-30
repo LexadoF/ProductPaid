@@ -2,7 +2,10 @@ import { BadRequestException, Inject } from '@nestjs/common';
 import { DataSourceImpl } from '../../../infrastructure/database/typeorm.config';
 import { DataSource } from 'typeorm';
 import { usersAbstractionRepository } from './users-abstraction.repository';
-import { CreateUserDto } from '../../../application/dtos/user.dto';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+} from '../../../application/dtos/user.dto';
 import { CustomerModel } from '../../../infrastructure/database/models/customer.model';
 import { hash } from 'bcrypt';
 
@@ -38,6 +41,18 @@ export class UsersRepository implements usersAbstractionRepository {
         .find({ where: { email: email } });
       return user[0];
     }
+  }
+
+  async updateUser(
+    email: string,
+    updatedUserFields: UpdateUserDto,
+  ): Promise<CustomerModel> {
+    const user = await this.getUser(email);
+    user.name = updatedUserFields.name || user.name;
+    user.password =
+      (await this.hashPassword(updatedUserFields.password)) || user.password;
+    user.address = updatedUserFields.address || user.address;
+    return await this.conn.getRepository(CustomerModel).save(user);
   }
 
   private async userExists(email: string): Promise<boolean> {

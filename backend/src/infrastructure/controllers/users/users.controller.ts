@@ -7,15 +7,20 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CreateUserDto } from '../../../application/dtos/user.dto';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+} from '../../../application/dtos/user.dto';
 import { UsersCreateUsecase } from '../../../application/useCases/users-create/users-create.usecase';
 import { UsersGetOneUsecase } from '../../../application/useCases/users-get-one/users-get-one.usecase';
+import { UsersUpdateUsecase } from 'src/application/useCases/users-update/users-update.usecase';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private userCreateUseCase: UsersCreateUsecase,
     private userGetUseCase: UsersGetOneUsecase,
+    private userUpdateUseCase: UsersUpdateUsecase,
   ) {}
 
   @Post('/create')
@@ -23,9 +28,12 @@ export class UsersController {
     return this.userCreateUseCase.execute(newUser);
   }
 
-  @Patch(':id')
-  updateUser(@Param('id') id: number, @Body() updatedUserFields: any) {
-    return `${id}  ${updatedUserFields}`;
+  @Patch(':email')
+  updateUser(
+    @Param('email') email: string,
+    @Body() updatedUserFields: UpdateUserDto,
+  ) {
+    return this.userUpdateUseCase.execute(email, updatedUserFields);
   }
 
   @Get(':email')
