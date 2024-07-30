@@ -27,15 +27,15 @@ export class TransactionModel {
     nullable: false,
   })
   @JoinColumn({ name: 'customer_id', referencedColumnName: 'id' })
-  customer_id: CustomerModel | number;
+  customer_id: number;
 
   @ManyToOne(() => ProductModel, (product) => product.id, { nullable: false })
   @JoinColumn({ name: 'product_id', referencedColumnName: 'id' })
-  product_id: ProductModel | number;
+  product_id: number;
 
   @ManyToOne(() => DeliveryModel, (delivery) => delivery.id, {
     nullable: false,
   })
   @JoinColumn({ name: 'delivery_id', referencedColumnName: 'id' })
-  delivery_id: DeliveryModel | number;
+  delivery_id: number;
 }
