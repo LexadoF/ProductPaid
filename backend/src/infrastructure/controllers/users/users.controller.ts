@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from '../../../application/dtos/user.dto';
 import { UsersCreateUsecase } from '../../../application/useCases/users-create/users-create.usecase';
-import { UsersGetOneUsecase } from 'src/application/useCases/users-get-one/users-get-one.usecase';
+import { UsersGetOneUsecase } from '../../../application/useCases/users-get-one/users-get-one.usecase';
 
 @Controller('users')
 export class UsersController {

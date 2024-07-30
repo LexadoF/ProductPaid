@@ -1,4 +1,4 @@
-import { CustomerModel } from 'src/infrastructure/database/models/customer.model';
+import { CustomerModel } from '../../../infrastructure/database/models/customer.model';
 import { CreateUserDto } from '../../../application/dtos/user.dto';
 
 export abstract class usersAbstractionRepository {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../../../infrastructure/services/users/users.service';
-import { CustomerModel } from 'src/infrastructure/database/models/customer.model';
+import { CustomerModel } from '../../../infrastructure/database/models/customer.model';
 
 @Injectable()
 export class UsersGetOneUsecase {
