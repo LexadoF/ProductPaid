@@ -2,8 +2,9 @@ import { Inject } from '@nestjs/common';
 import { ProductModel } from '../../../infrastructure/database/models/product.model';
 import { DataSourceImpl } from '../../../infrastructure/database/typeorm.config';
 import { DataSource } from 'typeorm';
+import { ProductsAbstractionRepository } from './products-abstraction.repository';
 
-export class ProductsRepository {
+export class ProductsRepository implements ProductsAbstractionRepository {
   private conn: DataSource;
 
   constructor(@Inject(DataSourceImpl) private dataSourceImpl: DataSourceImpl) {
@@ -14,8 +15,9 @@ export class ProductsRepository {
     return await productsRepo.find();
   }
 
-  async getProductById(id: number): Promise<ProductModel[]> {
+  async getProductById(id: number): Promise<ProductModel> {
     const productsRepo = this.conn.getRepository(ProductModel);
-    return await productsRepo.find({ where: { id: id } });
+    const res = await productsRepo.find({ where: { id: id } });
+    return res[0];
   }
 }
