@@ -3,6 +3,7 @@ import { ProductsRepository } from './repository/products/products.repository';
 import { ProductsService } from '../infrastructure/services/products/products.service';
 import { UsersService } from '../infrastructure/services/users/users.service';
 import { UsersRepository } from './repository/users/users.repository';
+import { AuthRepository } from './repository/logins/auth.repository';
 
 @Module({
   imports: [],
@@ -12,7 +13,8 @@ import { UsersRepository } from './repository/users/users.repository';
     ProductsRepository,
     UsersService,
     UsersRepository,
+    AuthRepository,
   ],
-  exports: [ProductsRepository, UsersRepository],
+  exports: [ProductsRepository, UsersRepository, AuthRepository],
 })
 export class DomainModule {}

@@ -10,3 +10,4 @@ export const dbName: string = process.env.DB_NAME as string;
 export const appDefaultPort: number = parseInt(process.env.PORT as string, 10);
 export const appPubKey: string = process.env.PUB_KEY;
 export const appPrivKey: string = process.env.PRIV_KEY;
+export const jwtSecret: string = process.env.JWT_SECRET;

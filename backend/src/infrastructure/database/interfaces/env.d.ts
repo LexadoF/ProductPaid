@@ -9,6 +9,7 @@ declare global {
       PORT: string;
       PUB_KEY: string;
       PRIV_KEY: string;
+      JWT_SECRET: string;
     }
   }
 }
