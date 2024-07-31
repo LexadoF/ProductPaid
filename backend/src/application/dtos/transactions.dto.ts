@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import {
+  IsEmail,
   IsIn,
   IsNotEmpty,
   IsNumber,
@@ -108,6 +109,11 @@ export class CreateTransactionDto {
   @IsNotEmpty()
   @IsNumber()
   product_id: number;
+
+  @IsNotEmpty()
+  @IsEmail()
+  @IsString()
+  customer_email: string;
 
   @IsNotEmpty()
   @IsObject()

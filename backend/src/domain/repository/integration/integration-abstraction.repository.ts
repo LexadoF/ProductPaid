@@ -1,17 +1,18 @@
 import {
   CardDto,
   CustomerDto,
+  shippingDto,
 } from '../../../application/dtos/transactions.dto';
 
 export abstract class integrationAbstractionRepository {
   abstract createPaymentWP(
     transactionNumber: string,
-    delivery: number,
+    customerEmail: string,
     cartToDebit: CardDto,
-    acceptance_token: string,
     subtotal: number,
     customerData: CustomerDto,
+    shippDetails: shippingDto,
     installments: number,
-  ): Promise<any>;
+  ): Promise<void>;
   abstract checkPaymentStatus(): any;
 }
