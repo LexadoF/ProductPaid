@@ -8,6 +8,7 @@ import {
 } from '../../../application/dtos/user.dto';
 import { CustomerModel } from '../../../infrastructure/database/models/customer.model';
 import { hash } from 'bcrypt';
+import { TransactionModel } from 'src/infrastructure/database/models/transaction.model';
 
 export class UsersRepository implements usersAbstractionRepository {
   private conn: DataSource;
@@ -62,6 +63,27 @@ export class UsersRepository implements usersAbstractionRepository {
     } else {
       await this.conn.getRepository(CustomerModel).delete({ email: email });
       return;
+    }
+  }
+
+  async getTransactions(email: string): Promise<TransactionModel[]> {
+    const exists = await this.userExists(email);
+    if (exists === false) {
+      throw new BadRequestException('User not exists');
+    } else {
+      const user = await this.conn
+        .getRepository(CustomerModel)
+        .createQueryBuilder('customer')
+        .where('customer.email = :email', { email: email })
+        .getOne();
+      const transactionList = await this.conn
+        .getRepository(TransactionModel)
+        .createQueryBuilder('transaction')
+        .where('transaction.customer_id  = :customer_id ', {
+          customer_id: user.id,
+        })
+        .getMany();
+      return transactionList;
     }
   }
 
