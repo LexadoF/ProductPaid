@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { integrationAbstractionRepository } from './integration-abstraction.repository';
 import { DataSourceImpl } from '../../../infrastructure/database/typeorm.config';
-import { BadRequestException, Inject } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { TransactionStatus } from '../../enums/transaction.enum';
 import { TransactionModel } from '../../../infrastructure/database/models/transaction.model';
 import { ProductModel } from '../../../infrastructure/database/models/product.model';
@@ -40,7 +40,7 @@ export class IntegrationRepository implements integrationAbstractionRepository {
     );
 
     try {
-      await axios.post(
+      const res = await axios.post(
         `${this.baseUrlIntegration}transactions`,
         {
           acceptance_token: await this.getAcceptToken(),
@@ -73,27 +73,78 @@ export class IntegrationRepository implements integrationAbstractionRepository {
         },
         { headers: { Authorization: `Bearer ${appPubKey}` } },
       );
+
+      await this.saveLocalIntegrationReference(
+        res.data.data.id,
+        transactionNumber,
+      );
+
+      setTimeout(async () => {
+        await this.checkPaymentStatusWP(res.data.data.id);
+      }, 5000);
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log('error', JSON.stringify(error.response.data));
         throw Error(JSON.stringify(error.response.data));
       }
     }
   }
-  async checkPaymentStatus() {
-    throw new Error('Method not implemented.');
+
+  async checkPaymentStatusWP(externalTransactionId: string): Promise<void> {
+    const paymentStatus = await axios.get(
+      `${this.baseUrlIntegration}transactions/${externalTransactionId}`,
+    );
+
+    await this.crossReferencePaymentStatus(
+      paymentStatus.data?.data?.id,
+      paymentStatus.data?.data?.status,
+      paymentStatus.data?.data?.reference,
+    );
+  }
+
+  private async crossReferencePaymentStatus(
+    externalTransactionId: string,
+    statusToReference: string,
+    localReference: string,
+  ): Promise<void> {
+    const transactionRepo = this.conn.getRepository(TransactionModel);
+
+    const product = await transactionRepo.findOne({
+      where: {
+        id_paymentService: externalTransactionId,
+        transactionNumber: localReference,
+      },
+    });
+
+    if (product && product.status === (TransactionStatus.PENDING as string))
+      await this.updateLocalTransactionStatus(
+        product.transactionNumber,
+        statusToReference as TransactionStatus,
+      );
+  }
+
+  private async saveLocalIntegrationReference(
+    externalTransactionId: string,
+    localtransactionReference: string,
+  ): Promise<void> {
+    const transactionRepo = this.conn.getRepository(TransactionModel);
+    const product = await transactionRepo.findOne({
+      where: { transactionNumber: localtransactionReference },
+    });
+    product.id_paymentService = externalTransactionId;
+    await transactionRepo.save(product);
   }
 
   private async updateLocalTransactionStatus(
     transactionNumber: string,
     newStatus: TransactionStatus,
-  ): Promise<boolean> {
+  ): Promise<void> {
     const transactionRepo = this.conn.getRepository(TransactionModel);
     const transaction = await transactionRepo.findOne({
       where: { transactionNumber: transactionNumber },
     });
+
     if (!transaction) {
-      throw new BadRequestException('Transaction not found');
+      throw new Error('Transaction not found');
     }
 
     if (transaction.status !== newStatus) {
@@ -105,6 +156,7 @@ export class IntegrationRepository implements integrationAbstractionRepository {
         const product = await productRepo.findOne({
           where: { id: transaction.product_id },
         });
+
         if (product) {
           product.stock += transaction.product_ammount;
           await productRepo.save(product);
@@ -112,9 +164,7 @@ export class IntegrationRepository implements integrationAbstractionRepository {
       }
       transaction.status = newStatus;
       await transactionRepo.save(transaction);
-      return true;
     }
-    return false;
   }
 
   private async hashSignature(inputString: string): Promise<string> {
@@ -146,6 +196,7 @@ export class IntegrationRepository implements integrationAbstractionRepository {
         },
       },
     );
+
     return cardToken.data.data.id;
   }
 
@@ -153,6 +204,7 @@ export class IntegrationRepository implements integrationAbstractionRepository {
     const accToken = await axios.get(
       `${this.baseUrlIntegration}merchants/${appPubKey}`,
     );
+
     return accToken.data.data.presigned_acceptance.acceptance_token;
   }
 }

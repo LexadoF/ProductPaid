@@ -134,10 +134,6 @@ export class CreateTransactionDto {
   shipping_address: shippingDto;
 
   @IsNotEmpty()
-  @IsString()
-  acceptance_token: string;
-
-  @IsNotEmpty()
   @IsNumber()
   @Min(1)
   @Max(36)
