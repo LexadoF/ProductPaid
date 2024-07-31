@@ -3,6 +3,7 @@ import {
   CreateUserDto,
   UpdateUserDto,
 } from '../../../application/dtos/user.dto';
+import { TransactionModel } from '../../../infrastructure/database/models/transaction.model';
 
 export abstract class usersAbstractionRepository {
   abstract createUser(newUser: CreateUserDto): Promise<void>;
@@ -12,4 +13,5 @@ export abstract class usersAbstractionRepository {
     updatedUserFields: UpdateUserDto,
   ): Promise<CustomerModel>;
   abstract deleteUser(email: string): Promise<void>;
+  abstract getTransactions(email: string): Promise<TransactionModel[]>;
 }
