@@ -8,7 +8,10 @@ import { TransactionModel } from '../../../infrastructure/database/models/transa
 import { v4 } from 'uuid';
 import { DeliveryModel } from '../../../infrastructure/database/models/delivery.model';
 import { ProductModel } from '../../../infrastructure/database/models/product.model';
-import { TransactionStatus } from '../../enums/transaction.enum';
+import {
+  TransactionBaseFee,
+  TransactionStatus,
+} from '../../enums/transaction.enum';
 
 export class TransactionRepository implements TrasnactionAbstractionRepository {
   private conn: DataSource;
@@ -22,17 +25,16 @@ export class TransactionRepository implements TrasnactionAbstractionRepository {
     token: string,
   ): Promise<TransactionModel> {
     const decodedToken = decode(token, { json: true });
-    const formattedAddress: string[] = decodedToken.addres.split('|');
     const delivery = new DeliveryModel();
 
-    delivery.addressL1 = formattedAddress[0];
-    delivery.addressL2 = formattedAddress[1];
-    delivery.country = formattedAddress[2];
-    delivery.region = formattedAddress[3];
-    delivery.city = formattedAddress[4];
-    delivery.name = formattedAddress[5];
-    delivery.phone_number = formattedAddress[6];
-    delivery.postal_code = formattedAddress[7];
+    delivery.addressL1 = newTransaction.shipping_address.address_line_1;
+    delivery.addressL2 = newTransaction.shipping_address.address_line_2;
+    delivery.country = newTransaction.shipping_address.country;
+    delivery.region = newTransaction.shipping_address.region;
+    delivery.city = newTransaction.shipping_address.city;
+    delivery.name = newTransaction.shipping_address.name;
+    delivery.phone_number = newTransaction.shipping_address.phone_number;
+    delivery.postal_code = newTransaction.shipping_address.postal_code;
 
     const deliveryInDB = await this.conn.manager.save(DeliveryModel, delivery);
 
@@ -42,6 +44,12 @@ export class TransactionRepository implements TrasnactionAbstractionRepository {
     });
     if (!product || product.stock < newTransaction.product_ammount) {
       throw new BadRequestException('Insufficient stock');
+    }
+    let deliveryFee: number;
+    if (newTransaction.shipping_address.region === 'Cundinamarca') {
+      deliveryFee = TransactionBaseFee.FEE_CUND;
+    } else if (newTransaction.shipping_address.region === 'Antioquia') {
+      deliveryFee = TransactionBaseFee.FEE_ANT;
     }
     product.stock -= newTransaction.product_ammount;
     await productRepo.save(product);
@@ -53,10 +61,13 @@ export class TransactionRepository implements TrasnactionAbstractionRepository {
     transaction.transactionNumber = transctnum;
     transaction.delivery_id = deliveryInDB.id;
     transaction.product_id = newTransaction.product_id;
-    transaction.subtotal = await this.CalculateSubtotal(
-      newTransaction.product_id,
-      newTransaction.product_ammount,
-    );
+    transaction.subtotal =
+      (await this.CalculateSubtotal(
+        newTransaction.product_id,
+        newTransaction.product_ammount,
+      )) +
+      TransactionBaseFee.BASE_FEE_GLOBAL +
+      deliveryFee;
     return await this.conn.manager.save(TransactionModel, transaction);
   }
 
