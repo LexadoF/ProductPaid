@@ -11,7 +11,10 @@ export class ProductModel {
   @Column('varchar', { nullable: true, default: 'N/A' })
   description: string;
 
-  @Column('decimal', { precision: 10, scale: 2, unsigned: true, default: 0 })
+  @Column('varchar', { nullable: true })
+  image: string;
+
+  @Column('int', { unsigned: true, default: 0 })
   price: number;
 
   @Column('int', { unsigned: true, nullable: false, default: 0 })

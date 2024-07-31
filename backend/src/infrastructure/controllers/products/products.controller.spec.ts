@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductsController } from './products.controller';
-import { ProductsListUsecase } from '../../../application/useCases/products-list.usecase/products-list.usecase';
+import { ProductsListUsecase } from '../../../application/useCases/products-list/products-list.usecase';
 import { ProductsGetOneByIdUsecase } from '../../../application/useCases/products-get-one-by-id/products-get-one-by-id.usecase';
 
 class MockProductsListUsecase {
