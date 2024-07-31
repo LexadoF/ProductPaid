@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, logout } from '../../features/auth/authSlice';
 import {
   Container,
   TextField,
@@ -9,10 +8,12 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import './Login.css';
 import { RootState } from '../../app/store';
 import axios, { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { login, logout } from '../../features/auth/authSlice';
 import { URL_BASE } from '../../shared/constants/constants';
+import './Login.css';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -22,6 +23,12 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated)
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(isAuth) navigate('/store');
+  }, [isAuth]);
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,11 +40,12 @@ const Login: React.FC = () => {
       if (res.status === 201 || res.status === 200) {
         setjsonToken(res.data.token);
         dispatch(login({ isAuthenticated: true, user: { email, token: jsonToken } }));
+        navigate('/store')
       }
       dispatch(logout());
     }).catch((err: AxiosError) => {
       {
-        if (err.response?.status === 400) {
+        if (err.response?.status === 400 || err.response?.status === 401) {
           seterrorMsg('Credenciales invalidas');
         }
       }
