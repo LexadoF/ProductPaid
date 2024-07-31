@@ -3,14 +3,16 @@ import {
   IsNotEmpty,
   IsNumber,
   IsObject,
+  IsPhoneNumber,
   IsString,
+  Max,
   MaxLength,
   Min,
   MinLength,
   ValidateNested,
 } from 'class-validator';
 
-class CardDto {
+export class CardDto {
   @IsNotEmpty()
   @IsString()
   number: string;
@@ -38,6 +40,25 @@ class CardDto {
   card_holder: string;
 }
 
+export class CustomerDto {
+  @IsNotEmpty()
+  @IsString()
+  @IsPhoneNumber('CO')
+  phone_number: string;
+
+  @IsNotEmpty()
+  @IsString()
+  full_name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  legal_id: string;
+
+  @IsNotEmpty()
+  @IsString()
+  legal_id_type: string;
+}
+
 export class CreateTransactionDto {
   @IsNotEmpty()
   @IsNumber()
@@ -55,6 +76,18 @@ export class CreateTransactionDto {
   card: CardDto;
 
   @IsNotEmpty()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => CustomerDto)
+  customer_data: CustomerDto;
+
+  @IsNotEmpty()
   @IsString()
   acceptance_token: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(1)
+  @Max(48)
+  installments: number;
 }
