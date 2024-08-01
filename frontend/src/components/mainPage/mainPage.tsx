@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { URL_BASE } from '../../shared/constants/constants';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Card,
   CardContent,
@@ -241,7 +241,7 @@ const MainPage: React.FC = () => {
     <>
       {!isAuth && (
         <div className='unRegUs'>
-          <p>Hola bienvenido a esta tienda de prueba, para comprar debes ser un usuario registrado, si aún no lo eres: <a href="/register">Registrate</a></p>
+          <p>Hola bienvenido a esta tienda de prueba, para comprar debes ser un usuario registrado, si aún no lo eres: <Button color="inherit" component={Link} to="/register">Registro</Button></p>
         </div>
       )}
       <div className='main'>
