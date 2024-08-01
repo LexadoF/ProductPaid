@@ -8,7 +8,7 @@ import {
 } from '../../../application/dtos/user.dto';
 import { CustomerModel } from '../../../infrastructure/database/models/customer.model';
 import { hash } from 'bcrypt';
-import { TransactionModel } from 'src/infrastructure/database/models/transaction.model';
+import { TransactionModel } from '../../../infrastructure/database/models/transaction.model';
 
 export class UsersRepository implements usersAbstractionRepository {
   private conn: DataSource;
