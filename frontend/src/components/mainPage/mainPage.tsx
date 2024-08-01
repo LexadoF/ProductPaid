@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import { URL_BASE } from '../../shared/constants/constants';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
+import type { RootState } from '../../app/store';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Card,

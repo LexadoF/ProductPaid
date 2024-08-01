@@ -1,9 +1,9 @@
-import React from 'react';
+import type React from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../features/auth/authSlice';
-import { RootState } from '../../app/store';
+import type { RootState } from '../../app/store';
 
 
 const Navbar: React.FC = () => {
