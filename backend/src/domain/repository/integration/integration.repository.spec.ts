@@ -76,6 +76,11 @@ describe('IntegrationRepository', () => {
         data: { data: { id: 'ext_txn_123' } },
       });
 
+      jest.spyOn(repository, 'tokenizeCard').mockResolvedValue('mock_token');
+      jest
+        .spyOn(repository, 'getAcceptToken')
+        .mockResolvedValue('mock_accept_token');
+
       await repository.createPaymentWP(
         transactionNumber,
         customerEmail,
@@ -89,14 +94,14 @@ describe('IntegrationRepository', () => {
       expect(axios.post).toHaveBeenCalledWith(
         `${mockDataSourceImpl.baseUrlIntegration}transactions`,
         expect.objectContaining({
-          acceptance_token: expect.any(String),
+          acceptance_token: 'mock_accept_token',
           amount_in_cents: subtotal,
           currency: 'COP',
           signature: expect.any(String),
           customer_email: customerEmail,
           payment_method: {
             type: 'CARD',
-            token: expect.any(String),
+            token: 'mock_token',
             installments,
           },
           reference: transactionNumber,

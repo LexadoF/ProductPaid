@@ -13,26 +13,45 @@ import {
   TransactionStatus,
 } from '../../enums/transaction.enum';
 import { TransactionRepository } from '../transaction/transaction.repository';
-import { CreateTransactionDto } from 'src/application/dtos/transactions.dto';
-import { ProductModel } from 'src/infrastructure/database/models/product.model';
+import { CreateTransactionDto } from '../../../application/dtos/transactions.dto';
+import { ProductModel } from '../../../infrastructure/database/models/product.model';
+
+const mockProductRepository = {
+  findOne: jest.fn(),
+  save: jest.fn(),
+  delete: jest.fn(),
+  createQueryBuilder: jest.fn().mockReturnValue({
+    where: jest.fn().mockReturnThis(),
+    getOne: jest.fn(),
+    getMany: jest.fn(),
+  }),
+};
+
+const mockCustomerRepository = {
+  findOne: jest.fn(),
+  save: jest.fn(),
+  delete: jest.fn(),
+  createQueryBuilder: jest.fn().mockReturnValue({
+    where: jest.fn().mockReturnThis(),
+    getOne: jest.fn(),
+    getMany: jest.fn(),
+  }),
+};
 
 const mockDataSourceImpl = {
   getDataSource: jest.fn(() => ({
-    getRepository: jest.fn().mockImplementation((entity: any) => ({
-      findOne: jest.fn().mockResolvedValue(null),
-      save: jest.fn().mockResolvedValue({ id: 1 }),
-      delete: jest.fn(),
-      createQueryBuilder: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnThis(),
-        getOne: jest.fn().mockResolvedValue({ id: 1 }),
-        getMany: jest.fn().mockResolvedValue([]),
-      }),
-    })),
+    getRepository: jest.fn().mockImplementation((entity: any) => {
+      if (entity === ProductModel) {
+        return mockProductRepository;
+      }
+      if (entity === CustomerModel) {
+        return mockCustomerRepository;
+      }
+      return null;
+    }),
     manager: {
-      getRepository: jest.fn().mockImplementation((entity: any) => ({
-        findOne: jest.fn().mockResolvedValue(null),
-        save: jest.fn().mockResolvedValue({ id: 1 }),
-      })),
+      save: jest.fn(),
+      delete: jest.fn(),
     },
   })) as unknown as DataSource,
   baseUrlIntegration: 'https://mock-api-url.com/',
@@ -44,25 +63,6 @@ describe('Repositories', () => {
   let mockDataSource: jest.Mocked<DataSource>;
 
   beforeEach(async () => {
-    mockDataSource = {
-      getRepository: jest.fn().mockImplementation((entity: any) => ({
-        findOne: jest.fn().mockResolvedValue(null),
-        save: jest.fn().mockResolvedValue({ id: 1 }),
-        delete: jest.fn(),
-        createQueryBuilder: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnThis(),
-          getOne: jest.fn().mockResolvedValue({ id: 1 }),
-          getMany: jest.fn().mockResolvedValue([]),
-        }),
-      })),
-      manager: {
-        getRepository: jest.fn().mockImplementation((entity: any) => ({
-          findOne: jest.fn().mockResolvedValue(null),
-          save: jest.fn().mockResolvedValue({ id: 1 }),
-        })),
-      },
-    } as unknown as jest.Mocked<DataSource>;
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TransactionRepository,
@@ -165,16 +165,14 @@ describe('Repositories', () => {
       };
       const token = 'mocked-token';
 
-      jest
-        .spyOn(mockDataSource.getRepository(ProductModel), 'findOne')
-        .mockResolvedValue({
-          id: 1,
-          name: 'test product',
-          description: 'test product description',
-          image: null,
-          price: 10000,
-          stock: 0,
-        });
+      mockProductRepository.findOne.mockResolvedValue({
+        id: 1,
+        name: 'test product',
+        description: 'test product description',
+        image: null,
+        price: 10000,
+        stock: 0,
+      });
 
       await expect(
         transactionRepository.createTransaction(newTransaction, token),
