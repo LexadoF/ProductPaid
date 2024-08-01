@@ -161,6 +161,9 @@ const MainPage: React.FC = () => {
       installments,
     };
 
+    alert(JSON.stringify(requestBody));
+    return
+
     axios.post(`${URL_BASE}transactions/buy`, requestBody, { headers: { Authorization: `Bearer ${token}` } })
       .then(async (res) => {
         const { transactionNumber } = res.data;
@@ -370,13 +373,18 @@ const MainPage: React.FC = () => {
                 value={shippingAddress.address_line_2 || ''}
                 onChange={(e) => setShippingAddress({ ...shippingAddress, address_line_2: e.target.value })}
               />
-              <TextField
+              <InputLabel id="region">Región</InputLabel>
+              <Select
+              labelId='region'
                 label='Región'
                 fullWidth
-                margin='normal'
+                margin='dense'
                 value={shippingAddress.region || ''}
                 onChange={(e) => setShippingAddress({ ...shippingAddress, region: e.target.value })}
-              />
+              >
+                <MenuItem value={'Antioquia'}>Antioquia</MenuItem>
+                <MenuItem value={'Cundinamarca'}>Cundinamarca</MenuItem>
+              </Select>
               <TextField
                 label='Ciudad'
                 fullWidth
@@ -397,6 +405,9 @@ const MainPage: React.FC = () => {
                 margin='normal'
                 value={shippingAddress.phone_number || ''}
                 onChange={(e) => setShippingAddress({ ...shippingAddress, phone_number: e.target.value })}
+                helperText={
+                  isValidPhoneNumber(shippingAddress.phone_number) ? '' : 'Ingrese un número de teléfono válido'
+                }
               />
               <TextField
                 label='Código postal'
@@ -506,7 +517,8 @@ const MainPage: React.FC = () => {
                     card.number.length !== 16 ||
                     (shippingAddress.postal_code.length < 5 || shippingAddress.postal_code.length > 12) ||
                     !isValidPhoneNumber(customerData.phone_number) ||
-                    !isValidEmail(customerData.email)
+                    !isValidEmail(customerData.email) || 
+                    !isValidPhoneNumber(shippingAddress.phone_number)
                   }
                 >
                   Pagar
