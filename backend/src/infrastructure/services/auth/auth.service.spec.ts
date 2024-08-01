@@ -50,13 +50,12 @@ describe('AuthService', () => {
         password: 'password',
       };
 
-      // Mock user that includes the password field
       const user: CustomerModel = {
         id: 1,
         email: 'test@example.com',
         name: 'Test User',
         address: 'Test Address',
-        password: 'hashedpassword', // Include the password field
+        password: 'hashedpassword',
       };
 
       jest.spyOn(authRepository, 'login').mockResolvedValue(user);

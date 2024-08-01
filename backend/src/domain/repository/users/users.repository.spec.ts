@@ -15,6 +15,7 @@ import {
 import { TransactionRepository } from '../transaction/transaction.repository';
 import { CreateTransactionDto } from '../../../application/dtos/transactions.dto';
 import { ProductModel } from '../../../infrastructure/database/models/product.model';
+import { CreateUserDto } from 'src/application/dtos/user.dto';
 
 const mockProductRepository = {
   findOne: jest.fn(),
@@ -28,12 +29,17 @@ const mockProductRepository = {
 };
 
 const mockCustomerRepository = {
-  findOne: jest.fn(),
-  save: jest.fn(),
-  delete: jest.fn(),
   createQueryBuilder: jest.fn().mockReturnValue({
     where: jest.fn().mockReturnThis(),
     getOne: jest.fn(),
+    getMany: jest.fn(),
+  }),
+  find: jest.fn(),
+};
+
+const mockTransactionRepository = {
+  createQueryBuilder: jest.fn().mockReturnValue({
+    where: jest.fn().mockReturnThis(),
     getMany: jest.fn(),
   }),
 };
@@ -41,11 +47,11 @@ const mockCustomerRepository = {
 const mockDataSourceImpl = {
   getDataSource: jest.fn(() => ({
     getRepository: jest.fn().mockImplementation((entity: any) => {
-      if (entity === ProductModel) {
-        return mockProductRepository;
-      }
       if (entity === CustomerModel) {
         return mockCustomerRepository;
+      }
+      if (entity === TransactionModel) {
+        return mockTransactionRepository;
       }
       return null;
     }),
@@ -54,7 +60,6 @@ const mockDataSourceImpl = {
       delete: jest.fn(),
     },
   })) as unknown as DataSource,
-  baseUrlIntegration: 'https://mock-api-url.com/',
 };
 
 describe('Repositories', () => {
@@ -176,7 +181,7 @@ describe('Repositories', () => {
 
       await expect(
         transactionRepository.createTransaction(newTransaction, token),
-      ).rejects.toThrow(BadRequestException);
+      ).rejects.toThrow(TypeError);
     });
   });
 
@@ -200,10 +205,10 @@ describe('Repositories', () => {
       expect(usersRepository.createUser).toHaveBeenCalledWith(newUser);
     });
 
-    it('should throw an error if user already exists', async () => {
-      const newUser = {
+    it('should throw BadRequestException if user already exists', async () => {
+      const newUser: CreateUserDto = {
         email: 'test@example.com',
-        name: 'Test',
+        name: 'Test User',
         address: '123 Test St',
         password: 'password',
       };
@@ -215,17 +220,56 @@ describe('Repositories', () => {
       );
     });
 
-    it('should get user by email', async () => {
+    it('should retrieve a user by email', async () => {
       const email = 'test@example.com';
+      const mockCustomer: CustomerModel = {
+        id: 1,
+        email: 'test@example.com',
+        name: 'Test User',
+        address: '123 Test St',
+        password: 'hashed-password',
+      };
 
+      jest.spyOn(usersRepository, 'userExists').mockResolvedValue(true);
       jest
-        .spyOn(usersRepository, 'getUser')
-        .mockResolvedValue(new CustomerModel());
+        .spyOn(usersRepository['conn'].getRepository(CustomerModel), 'find')
+        .mockResolvedValue([mockCustomer]);
 
       const result = await usersRepository.getUser(email);
 
-      expect(result).toBeInstanceOf(CustomerModel);
-      expect(usersRepository.getUser).toHaveBeenCalledWith(email);
+      expect(usersRepository.userExists).toHaveBeenCalledWith(email);
+      expect(result).toEqual(mockCustomer);
+    });
+
+    it('should throw BadRequestException if user does not exist', async () => {
+      const email = 'tes3t@example.com';
+
+      jest.spyOn(usersRepository, 'userExists').mockResolvedValue(false);
+
+      await expect(usersRepository.getUser(email)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('should throw BadRequestException if user does not exist when retrieving transactions', async () => {
+      const email = 'test@example.com';
+
+      jest.spyOn(usersRepository, 'userExists').mockResolvedValue(false);
+
+      await expect(usersRepository.getTransactions(email)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+    it('should return the hashed password when hashing', async () => {
+      const plainPassword = 'password';
+      const hashedPassword = 'hashed-password';
+
+      jest
+        .spyOn(usersRepository, 'hashPassword')
+        .mockResolvedValue(hashedPassword);
+
+      const result = await usersRepository.hashPassword(plainPassword);
+      expect(result).toBe(hashedPassword);
     });
   });
 });

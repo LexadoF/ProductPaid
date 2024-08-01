@@ -23,7 +23,7 @@ describe('ProductsListUsecase', () => {
   });
 
   it('should use ProductsService to get products', async () => {
-    const products = await usecase.execute(); // Replace with the actual method name
+    const products = await usecase.execute();
     expect(products).toEqual([{ id: 1, name: 'Test Product' }]);
     expect(mockProductsService.getAllProducts).toHaveBeenCalled();
   });
