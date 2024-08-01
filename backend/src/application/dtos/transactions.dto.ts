@@ -107,7 +107,6 @@ export class CreateTransactionDto {
   product_ammount: number;
 
   @IsNotEmpty()
-  @IsNumber()
   product_id: number;
 
   @IsNotEmpty()

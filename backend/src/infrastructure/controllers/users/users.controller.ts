@@ -56,7 +56,7 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard)
-  @Get('transactions/:email')
+  @Get('/transactions/:email')
   getUserTransactions(@Param('email') email: string) {
     return this.usersGetTransactionsUseCase.execute(email);
   }
