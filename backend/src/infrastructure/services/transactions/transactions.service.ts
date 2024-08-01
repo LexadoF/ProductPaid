@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import {
   CardDto,
   CreateTransactionDto,
@@ -8,6 +8,7 @@ import {
 import { TransactionRepository } from '../../../domain/repository/transaction/transaction.repository';
 import { TransactionModel } from '../../../infrastructure/database/models/transaction.model';
 import { IntegrationRepository } from '../../../domain/repository/integration/integration.repository';
+import { isString } from 'class-validator';
 
 @Injectable()
 export class TransactionsService {
@@ -63,5 +64,13 @@ export class TransactionsService {
       installments,
     );
     return;
+  }
+
+  async checkTransaction(transaction_id: string) {
+    if (!isString(transaction_id))
+      throw new BadRequestException('Please provide a valid transaction id');
+    return await this.integrationRepository.checkPaymentStatusWP(
+      transaction_id,
+    );
   }
 }

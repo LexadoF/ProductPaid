@@ -13,6 +13,7 @@ import { AuthService } from '../infrastructure/services/auth/auth.service';
 import { TransactionCreateUsecase } from './useCases/transaction-create/transaction-create.usecase';
 import { TransactionsService } from '../infrastructure/services/transactions/transactions.service';
 import { UserListTransactionsUsecase } from './useCases/user-list-transactions/user-list-transactions.usecase';
+import { CheckTransactionStatusUsecase } from './useCases/check-transaction-status/check-transaction-status.usecase';
 
 @Module({
   imports: [DomainModule],
@@ -30,6 +31,7 @@ import { UserListTransactionsUsecase } from './useCases/user-list-transactions/u
     TransactionCreateUsecase,
     TransactionsService,
     UserListTransactionsUsecase,
+    CheckTransactionStatusUsecase,
   ],
   exports: [
     ProductsListUsecase,
@@ -41,6 +43,7 @@ import { UserListTransactionsUsecase } from './useCases/user-list-transactions/u
     LoginUsecase,
     TransactionCreateUsecase,
     UserListTransactionsUsecase,
+    CheckTransactionStatusUsecase,
   ],
 })
 export class ApplicationModule {}
