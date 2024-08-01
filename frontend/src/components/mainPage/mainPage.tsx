@@ -191,10 +191,13 @@ const MainPage: React.FC = () => {
   }
 
   const isValidPhoneNumber = (phoneNumber: string): boolean => {
-    const cleanedNumber = phoneNumber.replace(/\D/g, '');
-    const isValidMobile = cleanedNumber.length === 10 && /^[3][0-9]{2}/.test(cleanedNumber);
-    const isValidLandline = cleanedNumber.length >= 7 && cleanedNumber.length <= 8;
-    return isValidMobile || isValidLandline;
+    if (phoneNumber !== undefined) {
+      const cleanedNumber = phoneNumber.replace(/\D/g, '');
+      const isValidMobile = cleanedNumber.length === 10 && /^[3][0-9]{2}/.test(cleanedNumber);
+      const isValidLandline = cleanedNumber.length >= 7 && cleanedNumber.length <= 8;
+      return isValidMobile || isValidLandline;
+    }
+    return false
   };
 
 
@@ -375,7 +378,7 @@ const MainPage: React.FC = () => {
               />
               <InputLabel id="region">Región</InputLabel>
               <Select
-              labelId='region'
+                labelId='region'
                 label='Región'
                 fullWidth
                 margin='dense'
@@ -458,26 +461,61 @@ const MainPage: React.FC = () => {
                   onChange={(e) => setCard({ ...card, cvc: e.target.value })}
                   inputProps={{ maxLength: 4, minLength: 3 }}
                 />
-                <TextField
-                  label='Més de expiracion'
+                <InputLabel id="exp-month">Mes de expiración</InputLabel>
+                <Select
+                  labelId='exp-month'
+                  label='Mes de expiracion'
                   fullWidth
-                  margin='normal'
+                  margin='dense'
                   value={card.exp_month || ''}
                   onChange={(e) => setCard({ ...card, exp_month: e.target.value })}
-                />
-                <TextField
+                >
+                  <MenuItem value={'01'}>01</MenuItem>
+                  <MenuItem value={'02'}>02</MenuItem>
+                  <MenuItem value={'03'}>03</MenuItem>
+                  <MenuItem value={'04'}>04</MenuItem>
+                  <MenuItem value={'05'}>05</MenuItem>
+                  <MenuItem value={'06'}>06</MenuItem>
+                  <MenuItem value={'07'}>07</MenuItem>
+                  <MenuItem value={'08'}>08</MenuItem>
+                  <MenuItem value={'09'}>09</MenuItem>
+                  <MenuItem value={'10'}>10</MenuItem>
+                  <MenuItem value={'11'}>11</MenuItem>
+                  <MenuItem value={'12'}>12</MenuItem>
+                </Select>
+                <InputLabel id="exp-year">Mes de expiración</InputLabel>
+                <Select
+                  labelId='exp-year'
                   label='Año de expiración'
                   fullWidth
-                  margin='normal'
+                  margin='dense'
                   value={card.exp_year || ''}
                   onChange={(e) => setCard({ ...card, exp_year: e.target.value })}
-                />
+                >
+                  <MenuItem value={'24'}>24</MenuItem>
+                  <MenuItem value={'25'}>25</MenuItem>
+                  <MenuItem value={'26'}>26</MenuItem>
+                  <MenuItem value={'27'}>27</MenuItem>
+                  <MenuItem value={'28'}>28</MenuItem>
+                  <MenuItem value={'29'}>29</MenuItem>
+                  <MenuItem value={'30'}>30</MenuItem>
+                  <MenuItem value={'31'}>31</MenuItem>
+                  <MenuItem value={'32'}>32</MenuItem>
+                  <MenuItem value={'33'}>33</MenuItem>
+                  <MenuItem value={'34'}>34</MenuItem>
+                  <MenuItem value={'35'}>35</MenuItem>
+                  <MenuItem value={'36'}>36</MenuItem>
+                  <MenuItem value={'37'}>37</MenuItem>
+                </Select>
                 <TextField
                   label='Nombre en la tarjeta'
                   fullWidth
                   margin='normal'
                   value={card.card_holder || ''}
                   onChange={(e) => setCard({ ...card, card_holder: e.target.value })}
+                  helperText={
+                    card.card_holder && card.card_holder.length < 5 ? 'El nombre en la tarjeta debe ser de mínimo 5 caracteres' : ''
+                  }
                 />
                 <TextField
                   label='Cuotas'
@@ -517,8 +555,9 @@ const MainPage: React.FC = () => {
                     card.number.length !== 16 ||
                     (shippingAddress.postal_code.length < 5 || shippingAddress.postal_code.length > 12) ||
                     !isValidPhoneNumber(customerData.phone_number) ||
-                    !isValidEmail(customerData.email) || 
-                    !isValidPhoneNumber(shippingAddress.phone_number)
+                    !isValidEmail(customerData.email) ||
+                    !isValidPhoneNumber(shippingAddress.phone_number) ||
+                    card.card_holder.length < 5
                   }
                 >
                   Pagar
