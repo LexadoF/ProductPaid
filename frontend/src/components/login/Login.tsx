@@ -29,7 +29,6 @@ const Login: React.FC = () => {
     if(isAuth) navigate('/store');
   }, [isAuth]);
 
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     seterrorMsg('');
@@ -42,7 +41,6 @@ const Login: React.FC = () => {
         dispatch(login({ isAuthenticated: true, user: { email, token: jsonToken } }));
         navigate('/store')
       }
-      dispatch(logout());
     }).catch((err: AxiosError) => {
       {
         if (err.response?.status === 400 || err.response?.status === 401) {
