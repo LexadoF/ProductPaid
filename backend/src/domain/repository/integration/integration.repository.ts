@@ -89,7 +89,7 @@ export class IntegrationRepository implements integrationAbstractionRepository {
     }
   }
 
-  async checkPaymentStatusWP(externalTransactionId: string): Promise<void> {
+  async checkPaymentStatusWP(externalTransactionId: string): Promise<string> {
     const paymentStatus = await axios.get(
       `${this.baseUrlIntegration}transactions/${externalTransactionId}`,
     );
@@ -99,6 +99,17 @@ export class IntegrationRepository implements integrationAbstractionRepository {
       paymentStatus.data?.data?.status,
       paymentStatus.data?.data?.reference,
     );
+    return paymentStatus.data?.data?.status;
+  }
+
+  async getLocalPaymentCrossReference(
+    localtransactionId: string,
+  ): Promise<string> {
+    const data = await this.conn.manager
+      .getRepository(TransactionModel)
+      .findOne({ where: { transactionNumber: localtransactionId } });
+
+    return data.id_paymentService;
   }
 
   private async crossReferencePaymentStatus(
@@ -180,7 +191,7 @@ export class IntegrationRepository implements integrationAbstractionRepository {
     return hashHex;
   }
 
-  private async tokenizeCard(card: CardDto): Promise<string> {
+  async tokenizeCard(card: CardDto): Promise<string> {
     const cardToken = await axios.post(
       `${this.baseUrlIntegration}tokens/cards`,
       {
@@ -200,7 +211,7 @@ export class IntegrationRepository implements integrationAbstractionRepository {
     return cardToken.data.data.id;
   }
 
-  private async getAcceptToken(): Promise<string> {
+  async getAcceptToken(): Promise<string> {
     const accToken = await axios.get(
       `${this.baseUrlIntegration}merchants/${appPubKey}`,
     );

@@ -2,13 +2,10 @@ import { BadRequestException, Inject } from '@nestjs/common';
 import { DataSourceImpl } from '../../../infrastructure/database/typeorm.config';
 import { DataSource } from 'typeorm';
 import { usersAbstractionRepository } from './users-abstraction.repository';
-import {
-  CreateUserDto,
-  UpdateUserDto,
-} from '../../../application/dtos/user.dto';
+import { CreateUserDto } from '../../../application/dtos/user.dto';
 import { CustomerModel } from '../../../infrastructure/database/models/customer.model';
 import { hash } from 'bcrypt';
-import { TransactionModel } from 'src/infrastructure/database/models/transaction.model';
+import { TransactionModel } from '../../../infrastructure/database/models/transaction.model';
 
 export class UsersRepository implements usersAbstractionRepository {
   private conn: DataSource;
@@ -44,28 +41,6 @@ export class UsersRepository implements usersAbstractionRepository {
     }
   }
 
-  async updateUser(
-    email: string,
-    updatedUserFields: UpdateUserDto,
-  ): Promise<CustomerModel> {
-    const user = await this.getUser(email);
-    user.name = updatedUserFields.name || user.name;
-    user.password =
-      (await this.hashPassword(updatedUserFields.password)) || user.password;
-    user.address = updatedUserFields.address || user.address;
-    return await this.conn.getRepository(CustomerModel).save(user);
-  }
-
-  async deleteUser(email: string): Promise<void> {
-    const exists = await this.userExists(email);
-    if (exists === false) {
-      throw new BadRequestException('User not exists');
-    } else {
-      await this.conn.getRepository(CustomerModel).delete({ email: email });
-      return;
-    }
-  }
-
   async getTransactions(email: string): Promise<TransactionModel[]> {
     const exists = await this.userExists(email);
     if (exists === false) {
@@ -87,7 +62,7 @@ export class UsersRepository implements usersAbstractionRepository {
     }
   }
 
-  private async userExists(email: string): Promise<boolean> {
+  async userExists(email: string): Promise<boolean> {
     const user = await this.conn
       .getRepository(CustomerModel)
       .createQueryBuilder('customer')
@@ -97,7 +72,7 @@ export class UsersRepository implements usersAbstractionRepository {
     else return true;
   }
 
-  private async hashPassword(plainPassword: string): Promise<string> {
+  async hashPassword(plainPassword: string): Promise<string> {
     return await hash(plainPassword, 10);
   }
 }

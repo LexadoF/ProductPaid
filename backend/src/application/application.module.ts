@@ -6,13 +6,12 @@ import { ProductsGetOneByIdUsecase } from './useCases/products-get-one-by-id/pro
 import { UsersCreateUsecase } from './useCases/users-create/users-create.usecase';
 import { UsersService } from '../infrastructure/services/users/users.service';
 import { UsersGetOneUsecase } from './useCases/users-get-one/users-get-one.usecase';
-import { UsersUpdateUsecase } from './useCases/users-update/users-update.usecase';
-import { UsersDeleteUsecase } from './useCases/users-delete/users-delete.usecase';
 import { LoginUsecase } from './useCases/login/login.usecase';
 import { AuthService } from '../infrastructure/services/auth/auth.service';
 import { TransactionCreateUsecase } from './useCases/transaction-create/transaction-create.usecase';
 import { TransactionsService } from '../infrastructure/services/transactions/transactions.service';
 import { UserListTransactionsUsecase } from './useCases/user-list-transactions/user-list-transactions.usecase';
+import { CheckTransactionStatusUsecase } from './useCases/check-transaction-status/check-transaction-status.usecase';
 
 @Module({
   imports: [DomainModule],
@@ -23,24 +22,22 @@ import { UserListTransactionsUsecase } from './useCases/user-list-transactions/u
     UsersCreateUsecase,
     UsersService,
     UsersGetOneUsecase,
-    UsersUpdateUsecase,
-    UsersDeleteUsecase,
     LoginUsecase,
     AuthService,
     TransactionCreateUsecase,
     TransactionsService,
     UserListTransactionsUsecase,
+    CheckTransactionStatusUsecase,
   ],
   exports: [
     ProductsListUsecase,
     ProductsGetOneByIdUsecase,
     UsersCreateUsecase,
     UsersGetOneUsecase,
-    UsersUpdateUsecase,
-    UsersDeleteUsecase,
     LoginUsecase,
     TransactionCreateUsecase,
     UserListTransactionsUsecase,
+    CheckTransactionStatusUsecase,
   ],
 })
 export class ApplicationModule {}

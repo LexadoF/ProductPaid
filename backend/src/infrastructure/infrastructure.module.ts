@@ -13,6 +13,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtSecret } from './database/enviromental.config';
 import { TransactionsService } from './services/transactions/transactions.service';
 import { TransactionsController } from './controllers/transactions/transactions.controller';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { TransactionsController } from './controllers/transactions/transactions.
     UsersService,
     AuthService,
     TransactionsService,
+    AuthGuard,
   ],
   controllers: [
     ProductsController,
