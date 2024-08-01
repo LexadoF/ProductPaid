@@ -583,9 +583,9 @@ const MainPage: React.FC = () => {
                       <span>
                         Acepto haber leido los&nbsp;
                         <a href={permalink} target="_blank" rel="noopener noreferrer">
-                          Términos y condiciones y la plítica de privacidad
+                          Términos y condiciones y la política de privacidad
                         </a>
-                        &nbsp;para hacer esta compra
+                        &nbsp;para hacer esta compra.
                       </span>
                     }
                   />
