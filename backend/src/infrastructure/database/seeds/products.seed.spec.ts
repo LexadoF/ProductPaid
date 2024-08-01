@@ -65,6 +65,7 @@ describe('ProductSeeder', () => {
     expect(mockProductRepository.save).toHaveBeenCalledWith([
       {
         id: 1,
+        image: 'https://picsum.photos/200',
         name: 'Product 1',
         description: 'Description for product 1',
         price: 1000000,
@@ -72,6 +73,7 @@ describe('ProductSeeder', () => {
       },
       {
         id: 2,
+        image: 'https://picsum.photos/200',
         name: 'Product 2',
         description: 'Description for product 2',
         price: 2000000,
@@ -79,6 +81,7 @@ describe('ProductSeeder', () => {
       },
       {
         id: 3,
+        image: 'https://picsum.photos/200',
         name: 'Product 3',
         description: 'Description for product 3',
         price: 3000000,
@@ -86,6 +89,7 @@ describe('ProductSeeder', () => {
       },
       {
         id: 4,
+        image: 'https://picsum.photos/200',
         name: 'Product 4',
         description: 'Description for product 4',
         price: 4000000,
@@ -93,6 +97,7 @@ describe('ProductSeeder', () => {
       },
       {
         id: 5,
+        image: 'https://picsum.photos/200',
         name: 'Product 5',
         description: 'Description for product 5',
         price: 5000000,
@@ -100,6 +105,7 @@ describe('ProductSeeder', () => {
       },
       {
         id: 6,
+        image: 'https://picsum.photos/200',
         name: 'Product 6',
         description: 'Description for product 6',
         price: 6000000,
@@ -107,6 +113,7 @@ describe('ProductSeeder', () => {
       },
       {
         id: 7,
+        image: 'https://picsum.photos/200',
         name: 'Product 7',
         description: 'Description for product 7',
         price: 7000000,
@@ -114,6 +121,7 @@ describe('ProductSeeder', () => {
       },
       {
         id: 8,
+        image: 'https://picsum.photos/200',
         name: 'Product 8',
         description: 'Description for product 8',
         price: 8000000,
@@ -121,6 +129,7 @@ describe('ProductSeeder', () => {
       },
       {
         id: 9,
+        image: 'https://picsum.photos/200',
         name: 'Product 9',
         description: 'Description for product 9',
         price: 9000000,
@@ -128,10 +137,11 @@ describe('ProductSeeder', () => {
       },
       {
         id: 10,
+        image: 'https://picsum.photos/200',
         name: 'Product 10',
         description: 'Description for product 10',
         price: 10000000,
-        stock: 1000,
+        stock: 0,
       },
     ]);
   });
