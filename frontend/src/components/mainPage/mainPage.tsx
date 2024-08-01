@@ -241,7 +241,7 @@ const MainPage: React.FC = () => {
     <>
       {!isAuth && (
         <div className='unRegUs'>
-          <p>Hola bienvenido a esta tienda de prueba, para comprar debes ser un usuario registrado, si aún no lo eres: <a href="#">Registrate</a></p>
+          <p>Hola bienvenido a esta tienda de prueba, para comprar debes ser un usuario registrado, si aún no lo eres: <a href="/register">Registrate</a></p>
         </div>
       )}
       <div className='main'>
