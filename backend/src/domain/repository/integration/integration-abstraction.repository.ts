@@ -15,4 +15,7 @@ export abstract class integrationAbstractionRepository {
     installments: number,
   ): Promise<void>;
   abstract checkPaymentStatusWP(externalTransactionId: string): Promise<string>;
+  abstract getLocalPaymentCrossReference(
+    localtransactionId: string,
+  ): Promise<string>;
 }

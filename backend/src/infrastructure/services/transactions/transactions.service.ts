@@ -66,11 +66,15 @@ export class TransactionsService {
     return;
   }
 
-  async checkTransaction(transaction_id: string) {
+  async checkTransaction(transaction_id: string): Promise<string> {
     if (!isString(transaction_id))
       throw new BadRequestException('Please provide a valid transaction id');
+    const localReference =
+      await this.integrationRepository.getLocalPaymentCrossReference(
+        transaction_id,
+      );
     return await this.integrationRepository.checkPaymentStatusWP(
-      transaction_id,
+      localReference,
     );
   }
 }

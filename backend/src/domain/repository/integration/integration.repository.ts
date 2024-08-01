@@ -102,6 +102,16 @@ export class IntegrationRepository implements integrationAbstractionRepository {
     return paymentStatus.data?.data?.status;
   }
 
+  async getLocalPaymentCrossReference(
+    localtransactionId: string,
+  ): Promise<string> {
+    const data = await this.conn.manager
+      .getRepository(TransactionModel)
+      .findOne({ where: { transactionNumber: localtransactionId } });
+
+    return data.id_paymentService;
+  }
+
   private async crossReferencePaymentStatus(
     externalTransactionId: string,
     statusToReference: string,
