@@ -3,6 +3,7 @@ import Login from "./components/login/Login";
 import MainPage from './components/mainPage/mainPage';
 import Navbar from './components/shared/navbar';
 import Register from './components/register/register';
+import MyTransactions from './components/myTransactions/mytransactions';
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/my-transactions" element={<MyTransactions />} />
         <Route path="/login" element={<Login />} />
         <Route path="/store" element={<MainPage />} />
       </Routes>
