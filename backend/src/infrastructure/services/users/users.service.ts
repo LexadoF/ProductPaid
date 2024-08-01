@@ -1,8 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import {
-  CreateUserDto,
-  UpdateUserDto,
-} from '../../../application/dtos/user.dto';
+import { CreateUserDto } from '../../../application/dtos/user.dto';
 import { UsersRepository } from '../../../domain/repository/users/users.repository';
 import { isEmail } from 'class-validator';
 import { CustomerModel } from '../../../infrastructure/database/models/customer.model';
@@ -19,21 +16,6 @@ export class UsersService {
     if (!isEmail(email))
       throw new BadRequestException('Please provide a valid email');
     return await this.usersRepository.getUser(email);
-  }
-
-  async updateUser(
-    email: string,
-    updatedUserFields: UpdateUserDto,
-  ): Promise<CustomerModel> {
-    if (!isEmail(email))
-      throw new BadRequestException('Please provide a valid email');
-    return await this.usersRepository.updateUser(email, updatedUserFields);
-  }
-
-  async deleteUser(email: string): Promise<void> {
-    if (!isEmail(email))
-      throw new BadRequestException('Please provide a valid email');
-    return await this.usersRepository.deleteUser(email);
   }
 
   async getTransactions(email: string): Promise<any> {

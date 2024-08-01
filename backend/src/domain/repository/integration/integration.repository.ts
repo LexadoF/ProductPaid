@@ -191,7 +191,7 @@ export class IntegrationRepository implements integrationAbstractionRepository {
     return hashHex;
   }
 
-  private async tokenizeCard(card: CardDto): Promise<string> {
+  async tokenizeCard(card: CardDto): Promise<string> {
     const cardToken = await axios.post(
       `${this.baseUrlIntegration}tokens/cards`,
       {
@@ -211,7 +211,7 @@ export class IntegrationRepository implements integrationAbstractionRepository {
     return cardToken.data.data.id;
   }
 
-  private async getAcceptToken(): Promise<string> {
+  async getAcceptToken(): Promise<string> {
     const accToken = await axios.get(
       `${this.baseUrlIntegration}merchants/${appPubKey}`,
     );

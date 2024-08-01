@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TransactionsService } from 'src/infrastructure/services/transactions/transactions.service';
+import { TransactionsService } from '../../../infrastructure/services/transactions/transactions.service';
 
 @Injectable()
 export class CheckTransactionStatusUsecase {

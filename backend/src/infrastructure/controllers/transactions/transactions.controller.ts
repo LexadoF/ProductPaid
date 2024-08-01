@@ -11,7 +11,7 @@ import { CreateTransactionDto } from '../../../application/dtos/transactions.dto
 import { AuthGuard } from '../../../infrastructure/guards/auth.guard';
 import { TransactionCreateUsecase } from '../../../application/useCases/transaction-create/transaction-create.usecase';
 import { Request } from 'express';
-import { CheckTransactionStatusUsecase } from 'src/application/useCases/check-transaction-status/check-transaction-status.usecase';
+import { CheckTransactionStatusUsecase } from '../../../application/useCases/check-transaction-status/check-transaction-status.usecase';
 
 @Controller('transactions')
 export class TransactionsController {
