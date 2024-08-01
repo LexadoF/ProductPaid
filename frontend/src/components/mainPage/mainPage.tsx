@@ -63,7 +63,6 @@ const MainPage: React.FC = () => {
           <CardMedia
             component='img'
             height='140'
-            width='20'
             image={product.image}
             alt='product-img'
           />
@@ -76,7 +75,7 @@ const MainPage: React.FC = () => {
               {product.name}
             </Typography>
             <Typography variant='body2' color='text.secondary'>
-              {product.description}
+            {product.description.length > 30 ? product.description.substring(0, 30) + '...' : product.description}
             </Typography>
             <Typography variant='h6' color='text.primary'>
               {product.stock > 0 ? `$ ${formatPriceCOP(product.price)}` : 'Sin existencias'}
