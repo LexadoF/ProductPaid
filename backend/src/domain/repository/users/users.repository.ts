@@ -87,7 +87,7 @@ export class UsersRepository implements usersAbstractionRepository {
     }
   }
 
-  private async userExists(email: string): Promise<boolean> {
+  async userExists(email: string): Promise<boolean> {
     const user = await this.conn
       .getRepository(CustomerModel)
       .createQueryBuilder('customer')

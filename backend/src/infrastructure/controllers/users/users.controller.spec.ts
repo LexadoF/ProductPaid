@@ -6,7 +6,7 @@ import { UsersUpdateUsecase } from '../../../application/useCases/users-update/u
 import { UsersDeleteUsecase } from '../../../application/useCases/users-delete/users-delete.usecase';
 import { UserListTransactionsUsecase } from '../../../application/useCases/user-list-transactions/user-list-transactions.usecase';
 import { CreateUserDto } from '../../../application/dtos/user.dto';
-import { AuthGuard } from 'src/infrastructure/guards/auth.guard';
+import { AuthGuard } from '../../../infrastructure/guards/auth.guard';
 
 describe('UsersController', () => {
   let controller: UsersController;
