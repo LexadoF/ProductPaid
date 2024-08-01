@@ -49,6 +49,12 @@ const MainPage: React.FC = () => {
     setSelectedProduct(null);
   };
 
+  function formatPriceCOP(price: number): string {
+    const adjustedPrice = price / 100;
+    const formattedPrice = new Intl.NumberFormat('es-CO').format(adjustedPrice);
+    return `${formattedPrice}`;
+  }
+
   return (
     <div className='main'>
       {isAuth}
@@ -73,7 +79,7 @@ const MainPage: React.FC = () => {
               {product.description}
             </Typography>
             <Typography variant='h6' color='text.primary'>
-              {product.stock > 0 ? `$${product.price}` : 'Sin existencias'}
+              {product.stock > 0 ? `$ ${formatPriceCOP(product.price)}` : 'Sin existencias'}
             </Typography>
           </CardContent>
         </Card>
@@ -103,7 +109,7 @@ const MainPage: React.FC = () => {
               style={{ width: '100%', height: 'auto' }}
             />
             <Typography gutterBottom variant='h6' component='div'>
-              {selectedProduct.price}
+              $ {formatPriceCOP(selectedProduct.price)}
             </Typography>
             <Typography gutterBottom variant='body1' component='div'>
               {selectedProduct.description}
