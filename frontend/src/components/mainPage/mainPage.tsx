@@ -39,6 +39,7 @@ const MainPage: React.FC = () => {
   const [customerData, setCustomerData] = useState<any>({});
   const [shippingAddress, setShippingAddress] = useState<any>({});
   const [card, setCard] = useState<any>({});
+  const [permalink, setPermalink] = useState('');
   const [installments, setInstallments] = useState<number>(1);
   const [units, setUnits] = useState<number>(1);
   const [acceptTerms, setAcceptTerms] = useState<boolean>(false);
@@ -57,6 +58,19 @@ const MainPage: React.FC = () => {
       }
     });
   }, [isAuth, navigate]);
+
+  useEffect(() => {
+    const fetchPermalink = async () => {
+      try {
+        const res = await axios.get('https://api-sandbox.co.uat.wompi.dev/v1/merchants/pub_stagtest_g2u0HQd3ZMh05hsSgTS2lUV8t3s4mOt7');
+        setPermalink(res.data.data.presigned_acceptance.permalink);
+      } catch (error) {
+        console.error('Error fetching permalink:', error);
+      }
+    };
+
+    fetchPermalink();
+  }, []);
 
   const handleProductClick = (product: Product) => {
     setSelectedProduct(product);
@@ -199,7 +213,6 @@ const MainPage: React.FC = () => {
     }
     return false
   };
-
 
   return (
     <div className='main'>
@@ -526,10 +539,22 @@ const MainPage: React.FC = () => {
                   onChange={(e) => setInstallments(Number(e.target.value))}
                 />
                 <FormControlLabel
-                  control={<Checkbox checked={acceptTerms} onChange={(e) => setAcceptTerms(e.target.checked)} />}
-                  label='Accept Terms and Conditions'
+                  control={
+                    <Checkbox
+                      checked={acceptTerms}
+                      onChange={(e) => setAcceptTerms(e.target.checked)}
+                    />
+                  }
+                  label={
+                    <span>
+                      Acepto haber leido los&nbsp;
+                      <a href={permalink} target="_blank" rel="noopener noreferrer">
+                        Términos y condiciones y la plítica de privacidad 
+                      </a>
+                      &nbsp;para hacer esta compra
+                    </span>
+                  }
                 />
-                <Typography variant='h6'>Subtotal: $ {calculateSubtotal(selectedProduct!?.price, units || 1, shippingAddress.region)}</Typography>
                 <Button
                   variant='contained'
                   color='primary'
@@ -560,7 +585,7 @@ const MainPage: React.FC = () => {
                     card.card_holder.length < 5
                   }
                 >
-                  Pagar
+                  Pagar ${calculateSubtotal(selectedProduct!?.price, units || 1, shippingAddress.region)}
                 </Button>
               </>
             )}
