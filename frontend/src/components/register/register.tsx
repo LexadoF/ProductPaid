@@ -1,57 +1,61 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  Container,
-  TextField,
-  Button,
-  IconButton,
-  InputAdornment,
-} from '@mui/material';
+import { Container, TextField, Button, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { RootState } from '../../app/store';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../features/auth/authSlice';
+import '../login/Login.css'
 import { URL_BASE } from '../../shared/constants/constants';
-import './Login.css';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMsg, seterrorMsg] = useState('');
+  const [address, setAddress] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     if(isAuth) navigate('/store');
   }, [isAuth]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    seterrorMsg('');
-    axios.post(`${URL_BASE}auth/login`, {
-      email: email,
-      password: password
-    }).then((res) => {
+    setErrorMsg('');
+    try {
+      const res = await axios.post(`${URL_BASE}users/create`, {
+        name,
+        email,
+        password,
+        address,
+      });
       if (res.status === 201 || res.status === 200) {
-        dispatch(login({ isAuthenticated: true, user: { email, token: res.data.token } }));
-        navigate('/store')
+        alert('Por favor inicie sesión');
+        navigate('/login');
       }
-    }).catch((err: AxiosError) => {
-      {
-        if (err.response?.status === 400 || err.response?.status === 401) {
-          seterrorMsg('Credenciales invalidas');
-        }
+    } catch (err: any) {
+      if (err.response?.status === 400 || err.response?.status === 401) {
+        setErrorMsg('Registration failed');
       }
-    });
-    return;
+    }
   };
+
   return (
     <div className="login-container">
       <Container maxWidth="sm">
         <form onSubmit={handleSubmit} className="login-form">
+          <TextField
+            label="Name"
+            variant="outlined"
+            fullWidth
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            margin="normal"
+          />
           <TextField
             label="Email"
             type="email"
@@ -63,7 +67,7 @@ const Login: React.FC = () => {
             margin="normal"
           />
           <TextField
-            label="Contraseña"
+            label="Password"
             type={showPassword ? 'text' : 'password'}
             variant="outlined"
             fullWidth
@@ -85,9 +89,18 @@ const Login: React.FC = () => {
               ),
             }}
           />
-          {errorMsg && <p className='errors-paragraph'>{errorMsg}</p>}
+          <TextField
+            label="Address"
+            variant="outlined"
+            fullWidth
+            required
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            margin="normal"
+          />
+          {errorMsg && <p className="errors-paragraph">{errorMsg}</p>}
           <Button type="submit" variant="contained" color="primary" fullWidth>
-            Login
+            Register
           </Button>
         </form>
       </Container>
@@ -95,4 +108,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;
