@@ -7,7 +7,7 @@ import MyTransactions from './components/myTransactions/mytransactions';
 
 const App = () => {
   return (
-    <>
+    <Router>
       <Navbar/>
       <Routes>
         <Route path="/" element={<MainPage />} />
@@ -16,7 +16,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/store" element={<MainPage />} />
       </Routes>
-    </>
+    </Router>
   )
 }
 
