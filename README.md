@@ -38,7 +38,7 @@
 
 
 ## Endpoints
- * Swagger
+ * Swagger : https://app.swaggerhub.com/apis/STEVEFOLY/ProductPaidAPI/1.0.0
 
 
 
