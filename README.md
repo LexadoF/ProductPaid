@@ -40,5 +40,9 @@
 ## Endpoints
  * Swagger : https://app.swaggerhub.com/apis/STEVEFOLY/ProductPaidAPI/1.0.0
 
-
+## How to use locally
+- First you must create a database in MySql (the name doesn't matter as long as you reference it correctly in the .env file)
+- Copy the .env.example and rename it to .env, fill the variables with their respective data
+- go to the Backend directory and execute  `npm install` then `npm run start:dev`
+- go to the Frontend directory and execute  `npm install` then `npm run dev`
 
